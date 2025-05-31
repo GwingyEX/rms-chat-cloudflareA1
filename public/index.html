@@ -21,10 +21,10 @@
       background: #f9f9f9;
     }
     #messages div {
-      margin-bottom: 8px;
+      margin-bottom: 12px; /* Space between messages */
       word-wrap: break-word;
       overflow-wrap: break-word;
-      word-break: break-all;
+      word-break: break-word;
     }
     input, button {
       font-family: monospace;
@@ -100,7 +100,7 @@
         if (!res.ok) throw new Error(res.status);
         const messages = await res.json();
         messagesDiv.innerHTML = messages
-          .map(m => `<div><strong>${m.name}</strong>: ${m.text}</div><br>`)
+          .map(m => `<div><span style="font-weight: bold;">${m.name}:</span> <span>${m.text}</span></div>`)
           .join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
