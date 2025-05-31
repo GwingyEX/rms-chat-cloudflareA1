@@ -53,7 +53,7 @@
   <input type="text" id="name" placeholder="Your name" />
   <input type="text" id="text" placeholder="Type a message" />
   <button onclick="sendMessage()">Send</button>
-  <h5>Press enter or click button to send a message</h5>
+  <h5>Press enter or click button to send a message, pressing enter may take more time than clicking button</h5>
  <p>About: This chat website was made for people in Rockland Rodgers Middleschool or High school, It was deployed by Netlify and Chat messages are stored in JSONBlob.</p>
   <p>Dev notes: Hi guys :D hope you enjoy the site and the proxies</p>
   <p>Additional info: For maximum protection of proxy websites plz gatekeep website and code; code may be updated if deemed necessary</p> 
@@ -83,11 +83,28 @@
   </div>
   <hr />
   <div id="adminReset" style="font-size: small;">
+
+<h4> wanna play doom?</h4>
+<div id="doom-wrapper" style="display: none;">
+  <iframe 
+    src="https://js-dos.com/games/doom.exe.html" 
+    width="800" 
+    height="600" 
+    frameborder="0" 
+    scrolling="no" 
+    allowfullscreen>
+  </iframe>
+</div>
+<button id="toggle-doom">Show Doom</button>
+
     <h5>Reset Chat Log</h5>
     <input type="password" id="adminPass" placeholder="reset code" />
     <button onclick="resetMessages()">Reset Chat</button>
   </div>
   <hr />
+
+<hr>
+
   <h6>GwingyEX@proton.me</h6>
 
   <script>
@@ -218,6 +235,19 @@
         console.error(err);
       }
     }
+const doomWrapper = document.getElementById('doom-wrapper');
+const toggleDoomButton = document.getElementById('toggle-doom');
+
+toggleDoomButton.addEventListener('click', () => {
+  if (doomWrapper.style.display === 'none') {
+    doomWrapper.style.display = 'block';
+    toggleDoomButton.textContent = 'Hide Doom';
+  } else {
+    doomWrapper.style.display = 'none';
+    toggleDoomButton.textContent = 'Show Doom';
+  }
+});
+
   </script>
 </body>
 </html>
