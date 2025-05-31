@@ -21,19 +21,12 @@
       background: #f9f9f9;
     }
     .message {
-      display: flex;
-      align-items: flex-start;
       margin-bottom: 12px;
+      word-break: break-word;
     }
     .name {
-      min-width: 100px;
       font-weight: bold;
-      margin-right: 6px;
-      word-break: break-word;
-    }
-    .text {
-      flex: 1;
-      word-break: break-word;
+      margin-right: 4px;
     }
     input, button {
       font-family: monospace;
@@ -111,8 +104,7 @@
         messagesDiv.innerHTML = messages
           .map(m => `
             <div class="message">
-              <strong class="name">${m.name}:</strong>
-              <span class="text">${m.text}</span>
+              <span class="name">${m.name}:</span><span>${m.text}</span>
             </div>
           `).join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
