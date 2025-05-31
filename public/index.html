@@ -1,0 +1,209 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rms chat</title>
+  <style>
+    body {
+      background: white;
+      color: black;
+      font-family: monospace;
+      padding: 10px;
+    }
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      border: 1px solid black;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+    }
+    input, button {
+      font-family: monospace;
+      font-size: 16px;
+      padding: 5px;
+    }
+    #protected {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #ffffff;
+      border: 1px solid #ddd;
+    }
+    #hide-proxies {
+      display: none;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rms chat</h1>
+  <div id="messages">Loading...</div>
+  <input type="text" id="name" placeholder="Your name" />
+  <input type="text" id="text" placeholder="Type a message" />
+  <button onclick="sendMessage()">Send</button>
+  <h5>Press enter or click button to send a message</h5>
+  <p>About: This chat website was made for Rockland Rodgers students...</p>
+  <hr />
+  <h4>Enter Access Code to See Proxies</h4>
+  <input type="password" id="access-code" placeholder="Enter code" />
+  <button id="unlock">See Proxies</button>
+  <button id="hide-proxies">Hide Proxies</button>
+  <div id="protected">
+    <p>Proxy list:</p>
+    <ul>
+      <li>https://study.tests.fiat500.li/</li>
+      <li>https://homework.maths.percentages.perona.cl/</li>
+      <li>https://wiki.manica.org/</li>
+    </ul>
+    <p>Enter code for full proxy list</p>
+    <input type="password" id="advanced-code" placeholder="Code" />
+    <button id="go-advanced">Go to full Proxy list</button>
+  </div>
+  <hr />
+  <div id="adminReset" style="font-size: small;">
+    <h5>Reset Chat Log</h5>
+    <input type="password" id="adminPass" placeholder="reset code" />
+    <button onclick="resetMessages()">Reset Chat</button>
+  </div>
+  <hr />
+  <h6>GwingyEX@proton.me</h6>
+
+  <script>
+    // Chat variables
+    const nameInput   = document.getElementById('name');
+    const textInput   = document.getElementById('text');
+    const messagesDiv = document.getElementById('messages');
+
+    // Persist name
+    nameInput.value = localStorage.getItem('name') || '';
+    nameInput.addEventListener('input', () => {
+      localStorage.setItem('name', nameInput.value);
+    });
+
+    // Send message on Enter
+    textInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Load & send chat messages
+    async function loadMessages() {
+      try {
+        const res = await fetch('/api/getMessages');
+        if (!res.ok) throw new Error(res.status);
+        const messages = await res.json();
+        messagesDiv.textContent = messages.map(m => m.name + ': ' + m.text).join('\\n');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        messagesDiv.textContent = 'Error loading messages: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    async function sendMessage() {
+      const name = nameInput.value.trim();
+      const text = textInput.value.trim();
+      if (!name || !text) return;
+
+      try {
+        await fetch('/api/postMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, text })
+        });
+        textInput.value = '';
+        await loadMessages();
+      } catch (err) {
+        messagesDiv.textContent = 'Error sending message: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    loadMessages();
+    setInterval(loadMessages, 3000);
+
+    // Proxy gate variables
+    const SECRET_CODE  = "3876";
+    const codeInput    = document.getElementById('access-code');
+    const unlockBtn    = document.getElementById('unlock');
+    const hideBtn      = document.getElementById('hide-proxies');
+    const protectedDiv = document.getElementById('protected');
+
+    unlockBtn.addEventListener('click', () => {
+      if (codeInput.value === SECRET_CODE) {
+        protectedDiv.style.display = 'block';
+        hideBtn.style.display = 'inline-block';
+      } else {
+        alert('Incorrect code');
+        codeInput.value = '';
+      }
+    });
+
+    hideBtn.addEventListener('click', () => {
+      protectedDiv.style.display = 'none';
+      hideBtn.style.display = 'none';
+      codeInput.value = '';
+      document.getElementById('advanced-code').value = '';
+    });
+
+    codeInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') unlockBtn.click();
+    });
+
+    // Advanced proxies gate
+    const ADVANCED_CODE = "QuingyEX-3876"; 
+    const advancedInput = document.getElementById('advanced-code');
+    const goAdvancedBtn = document.getElementById('go-advanced');
+
+    goAdvancedBtn.addEventListener('click', () => {
+      if (advancedInput.value === ADVANCED_CODE) {
+        window.location.href = "https://nirbytes.com/post/1000-proxies-for-school-chromebook-2025";
+      } else {
+        alert("Incorrect Code");
+        advancedInput.value = "";
+      }
+    });
+
+    advancedInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') goAdvancedBtn.click();
+    });
+
+    // Admin Reset
+    const ADMIN_NAME = "GwingyEX";
+    const ADMIN_PASS = "(BRIDGE.3876)";
+
+    async function resetMessages() {
+      const user = nameInput.value.trim();
+      const pass = document.getElementById('adminPass').value.trim();
+
+      if (user !== ADMIN_NAME) {
+        alert('No permission.');
+        return;
+      }
+      if (pass !== ADMIN_PASS) {
+        alert('Incorrect reset password.');
+        return;
+      }
+
+      try {
+        await fetch('/api/resetMessages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([{ name: "System", text: "Rms chat by GwingyEX" }])
+        });
+        alert('Chat log reset.');
+        document.getElementById('adminPass').value = '';
+        await loadMessages();
+      } catch (err) {
+        alert('Failed to reset chat: ' + err.message);
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
