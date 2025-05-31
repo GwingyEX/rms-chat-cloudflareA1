@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -21,7 +22,8 @@
       background: #f9f9f9;
     }
     #messages div {
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      word-wrap: break-word;
     }
     input, button {
       font-family: monospace;
@@ -96,7 +98,9 @@
         const res = await fetch('/api/getMessages');
         if (!res.ok) throw new Error(res.status);
         const messages = await res.json();
-        messagesDiv.innerHTML = messages.map(m => `<div><strong>${m.name}</strong>: ${m.text}</div>`).join('');
+        messagesDiv.innerHTML = messages
+          .map(m => `<div><strong>${m.name}</strong>: ${m.text}</div>`)
+          .join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
         messagesDiv.textContent = 'Error loading messages: ' + err.message;
@@ -126,7 +130,6 @@
     loadMessages();
     setInterval(loadMessages, 3000);
 
-    // Proxy gate
     const SECRET_CODE  = "3876";
     const codeInput    = document.getElementById('access-code');
     const unlockBtn    = document.getElementById('unlock');
@@ -171,7 +174,6 @@
       if (e.key === 'Enter') goAdvancedBtn.click();
     });
 
-    // Admin Reset
     const ADMIN_NAME = "GwingyEX";
     const ADMIN_PASS = "(BRIDGE.3876)";
 
