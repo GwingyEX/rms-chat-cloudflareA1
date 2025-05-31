@@ -21,8 +21,9 @@
       background: #f9f9f9;
     }
     .message {
-      margin-bottom: 4px; /* Reduced spacing */
+      margin-bottom: 2px;
       word-break: break-word;
+      display: block;
     }
     .name {
       font-weight: bold;
@@ -101,11 +102,8 @@
         if (!res.ok) throw new Error(res.status);
         const messages = await res.json();
         messagesDiv.innerHTML = messages
-          .map(m => `
-            <div class="message">
-              <span class="name">${m.name}:</span> ${m.text}
-            </div>
-          `).join('');
+          .map(m => `<div class="message"><span class="name">${m.name}:</span> ${m.text}</div>`)
+          .join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
         messagesDiv.textContent = 'Error loading messages: ' + err.message;
