@@ -14,11 +14,14 @@
     #messages {
       height: 300px;
       overflow-y: auto;
-      white-space: pre-wrap;
+      white-space: normal;
       border: 1px solid black;
       padding: 10px;
       margin-bottom: 10px;
       background: #f9f9f9;
+    }
+    #messages div {
+      margin-bottom: 5px;
     }
     input, button {
       font-family: monospace;
@@ -72,18 +75,15 @@
   <h6>GwingyEX@proton.me</h6>
 
   <script>
-    // Chat variables
     const nameInput   = document.getElementById('name');
     const textInput   = document.getElementById('text');
     const messagesDiv = document.getElementById('messages');
 
-    // Persist name
     nameInput.value = localStorage.getItem('name') || '';
     nameInput.addEventListener('input', () => {
       localStorage.setItem('name', nameInput.value);
     });
 
-    // Send message on Enter
     textInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -91,13 +91,12 @@
       }
     });
 
-    // Load & send chat messages
     async function loadMessages() {
       try {
         const res = await fetch('/api/getMessages');
         if (!res.ok) throw new Error(res.status);
         const messages = await res.json();
-        messagesDiv.textContent = messages.map(m => m.name + ': ' + m.text).join('\\n');
+        messagesDiv.innerHTML = messages.map(m => `<div><strong>${m.name}</strong>: ${m.text}</div>`).join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
         messagesDiv.textContent = 'Error loading messages: ' + err.message;
@@ -127,7 +126,7 @@
     loadMessages();
     setInterval(loadMessages, 3000);
 
-    // Proxy gate variables
+    // Proxy gate
     const SECRET_CODE  = "3876";
     const codeInput    = document.getElementById('access-code');
     const unlockBtn    = document.getElementById('unlock');
@@ -155,7 +154,6 @@
       if (e.key === 'Enter') unlockBtn.click();
     });
 
-    // Advanced proxies gate
     const ADVANCED_CODE = "QuingyEX-3876"; 
     const advancedInput = document.getElementById('advanced-code');
     const goAdvancedBtn = document.getElementById('go-advanced');
