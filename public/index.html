@@ -20,10 +20,19 @@
       margin-bottom: 10px;
       background: #f9f9f9;
     }
-    #messages div {
-      margin-bottom: 12px; /* Space between messages */
-      word-wrap: break-word;
-      overflow-wrap: break-word;
+    .message {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .name {
+      min-width: 100px;
+      font-weight: bold;
+      margin-right: 6px;
+      word-break: break-word;
+    }
+    .text {
+      flex: 1;
       word-break: break-word;
     }
     input, button {
@@ -100,8 +109,12 @@
         if (!res.ok) throw new Error(res.status);
         const messages = await res.json();
         messagesDiv.innerHTML = messages
-          .map(m => `<div><span style="font-weight: bold;">${m.name}:</span> <span>${m.text}</span></div>`)
-          .join('');
+          .map(m => `
+            <div class="message">
+              <strong class="name">${m.name}:</strong>
+              <span class="text">${m.text}</span>
+            </div>
+          `).join('');
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } catch (err) {
         messagesDiv.textContent = 'Error loading messages: ' + err.message;
